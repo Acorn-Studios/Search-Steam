@@ -1,9 +1,7 @@
 from sentence_transformers import SentenceTransformer
 import csv
 import pickle as pkl
-import os
 
-train_on_all = False
 
 # 1. Load a pretrained Sentence Transformer model
 print("[TRAIN.PY] Loading model...")
@@ -16,8 +14,7 @@ with open (csv_file, 'r', encoding='utf-8') as file:
     reader = csv.reader(file)
     labeled = [row for row in reader]
 
-if not train_on_all: input = [i[1] for i in labeled] # Input is only the second column of the CSV
-else: input = [f"{i[1]} {i[2]} {i[3]}" for i in labeled] # Input is the combined descriptions
+input = [i[1] for i in labeled] # Input is only the second column of the CSV
 
 # 2. Calculate embeddings by calling model.encode()
 print("[TRAIN.PY] Calculating embeddings...")
