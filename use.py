@@ -17,13 +17,9 @@ class SteamTransformer:
         return self.model.encode(sentence, convert_to_tensor=True)
     def get_labeled(self):
         return self.labeled
-    def predict(self, prompt):
+    def predict(self, prompt, depth=0):
         embedding = self.encode(prompt)
         similarities = self.similarity(embedding)
-        index = similarities.argmax()
-        return { "appid": int(self.labeled[index][0]), "url" : "https://store.steampowered.com/app/" + str(self.labeled[index][0]), "similar_row" : self.labeled[index]}
-
-# 4. Calculate the embedding similarities
-ST = SteamTransformer()
-prompt = "This is a test sentence."
-print(ST.predict(prompt))
+        sorted_indices = similarities.argsort()[::-1]
+        index = sorted_indices[depth]
+        return {"appid": int(self.labeled[index][0]), "url" : "https://store.steampowered.com/app/" + str(self.labeled[index][0]), "similar_row" : self.labeled[index]}
